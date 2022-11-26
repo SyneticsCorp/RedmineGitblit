@@ -1,0 +1,40 @@
+version: '3.1'
+
+services:
+
+  redmine:
+    image: 'redmine:4.2.7'
+    container_name: Redmine
+    restart: always
+    ports:
+      - '80:3000'
+    environment:
+      REDMINE_DB_MYSQL: mysql
+      REDMINE_DB_USERNAME: root
+      REDMINE_DB_PASSWORD: example
+      # DB에 한글을 사용하기 위한 명령
+      REDMINE_DB_ENCODING: utf8
+    volumes:
+      - './Redmine_Data/Redmine/files:/usr/src/redmine/files'
+      # GitBlit 볼륨 바인딩
+      - 'gitblit_data:/gitblit/data'
+    depends_on:
+      - mysql
+
+  mysql:
+    image: 'mysql:5.7.33'
+    container_name: MySQL_5_7_33
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: redmine
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - './Redmine_Data/Mysql:/var/lib/mysql'
+
+volumes:
+  gitblit_data:
+    external:
+      name: 02_gitblit_gitblit_data

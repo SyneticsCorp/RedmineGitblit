@@ -1,0 +1,21 @@
+version: '3.1'
+
+services:
+  gitblit:
+    image: 'gitblit/gitblit:latest'
+    container_name: gitblit
+    restart: always
+    # 포트 정보는 필요에 따라 수정.
+    ports:
+      - '8282:8080'
+      - '8443:8443'
+      - '9418:9418'
+      - '29418:29418'
+      - '22222:22'
+    volumes:
+      - 'gitblit_data:/var/opt/gitblit'
+
+
+volumes:
+  gitblit_data:
+    driver: local
